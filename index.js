@@ -36,7 +36,7 @@ app.get('/user/:api_key', async (req, res) => {
     const api_key = req.params.api_key
 
     const selectQuery = {
-        text: `SELECT * FROM json WHERE user_id = $1`,
+        text: `SELECT * FROM json WHERE api_key = $1`,
         values: [api_key],
     }
 
@@ -60,11 +60,11 @@ app.post('/user/:api_key', async (req, res) => {
     const {json} = req.body
 
     const selectQuery = {
-        text: `SELECT 1 FROM json WHERE user_id = $1`,
+        text: `SELECT 1 FROM json WHERE api_key = $1`,
         values: [api_key],
     }
     const updateQuery = {
-        text: `UPDATE json SET json = $1 WHERE user_id = $2 RETURNING json`,
+        text: `UPDATE json SET json = $1 WHERE api_key = $2 RETURNING json`,
         values: [json, api_key],
     }
 
