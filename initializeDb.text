@@ -1,0 +1,9 @@
+CREATE TABLE json(
+	id serial PRIMARY KEY,
+	api_key VARCHAR (30) NOT NULL,
+	json TEXT
+)
+
+
+created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
