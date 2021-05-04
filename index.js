@@ -1,10 +1,8 @@
 const express = require('express')
 const app = express()
-
 const cors = require('cors')
 const db = require('./db.js').dbConnection
-
-const port = 3001
+const port = process.env.PORT
 
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
