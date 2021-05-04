@@ -8,7 +8,7 @@ const live_db = process.env.LIVE_DB
 // POSTGRES DB CONNECTION
 const dbConnection = env === 'development' ? local_db : live_db
 const {Pool, Client} = require('pg')
-new Client(dbConnection)
+const db = new Client(dbConnection)
 
 db.connect()
 
