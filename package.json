@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
     "dev": "cross-env NODE_ENV=development nodemon",
-    "deploy": "cross-env NODE_ENV=production nodemon"
+    "deploy": "cross-env NODE_ENV=production git push heroku master"
   },
   "author": "",
   "license": "ISC",
