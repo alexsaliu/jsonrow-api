@@ -1,16 +1,14 @@
 // ENVIRONMENT VARIABLES
 const dotenv = require('dotenv')
 dotenv.config()
-const DB_USERNAME = process.env.DB_USERNAME
-const DB_PASSWORD = process.env.DB_PASSWORD
-const DB_PORT = process.env.DB_PORT
-const ENV = process.env.NODE_ENV
+const env = process.env.NODE_ENV
+const local_db = process.env.LOCAL_DB
+const live_db = process.env.LIVE_DB
 
 // POSTGRES DB CONNECTION
+const dbConnection = env === 'development' ? local_db : live_db
 const {Pool, Client} = require('pg')
-const db = ENV === 'development'
-    ? new Client(`postgresql://${DB_USERNAME}:${DB_PASSWORD}@localhost:${DB_PORT}/json`)
-    : new Client("postgres://kajqcyfe:FFH1iEoAosl6W3NeDiWplCv4hVOtEhNj@rosie.db.elephantsql.com:5432/kajqcyfe")
+new Client(dbConnection)
 
 db.connect()
 
