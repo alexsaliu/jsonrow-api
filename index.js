@@ -9,8 +9,7 @@ app.use(express.json())
 app.use(cors())
 
 app.get('/', (req, res) => {
-    const ip = req.connection.remoteAddress
-    res.send("JSON backend" + ip)
+    res.send("JSON backend" + req.headers['x-forwarded-for'] + " - " + req.socket.remoteAddress)
 })
 
 app.get('/new', async (req, res) => {
