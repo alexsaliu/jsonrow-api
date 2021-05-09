@@ -9,11 +9,12 @@ app.use(express.json())
 app.use(cors())
 
 app.get('/', (req, res) => {
-    res.send("JSON backend")
+    const ip = req.connection.remoteAddress
+    res.send("JSON backend" + ip)
 })
 
 app.get('/new', async (req, res) => {
-    let api_key = new Array(3).fill(0).map(i => {
+    let api_key = new Array(30).fill(0).map(i => {
         return Math.round(Math.random()) ? String.fromCharCode(Math.round(Math.random() * 25) + 97) : Math.round(Math.random() * 9)
     }).join('')
 
@@ -24,16 +25,17 @@ app.get('/new', async (req, res) => {
 
     try {
         const data = await db.query(insertQuery);
-        res.status(200).send({"success": true, "data": data.rows[0].api_key})
+        res.status(200).send({"api_key": data.rows[0].api_key})
     }
     catch (err) {
         console.log(err);
-        res.status(500).send("Internal Server Error -- We had a problem with our server. Try again later.")
+        res.status(500).send("500 Internal Server Error -- Please Try again later")
     }
 })
 
 app.get('/user/:api_key', async (req, res) => {
     const api_key = req.params.api_key
+    console.log("OK");
 
     const selectQuery = {
         text: `SELECT * FROM json WHERE api_key = $1`,
@@ -43,21 +45,22 @@ app.get('/user/:api_key', async (req, res) => {
     try {
         const data = await db.query(selectQuery)
         if (data.rows.length) {
-            res.status(200).send({"success": true, "data": JSON.parse(data.rows[0].json)})
+            res.status(200).send({"json": JSON.parse(data.rows[0].json)})
         }
         else {
-            res.status(401).send("Unauthorized - Your API key is wrong.")
+            res.status(401).send("401 Unauthorized - Your API key is wrong")
         }
     }
     catch (err) {
         console.log(err)
-        res.status(500).send("Internal Server Error -- We had a problem with our server. Try again later.")
+        res.status(500).send("500 Internal Server Error -- Please Try again later")
     }
 })
 
 app.post('/user/:api_key', async (req, res) => {
     const api_key = req.params.api_key
     const {json} = req.body
+    console.log(json)
 
     const selectQuery = {
         text: `SELECT 1 FROM json WHERE api_key = $1`,
@@ -72,15 +75,15 @@ app.post('/user/:api_key', async (req, res) => {
         const idCheck = await db.query(selectQuery)
         if (idCheck.rows.length) {
             const data = await db.query(updateQuery)
-            res.status(200).send({"success": true, "data": JSON.parse(data.rows[0].json)})
+            res.status(200).send({"json": JSON.parse(data.rows[0].json)})
         }
         else {
-            res.status(401).send("Unauthorized - Your API key is wrong.")
+            res.status(401).send("401 Unauthorized - Your API key is wrong")
         }
     }
     catch (err) {
         console.log(err)
-        res.status(500).send("Internal Server Error -- We had a problem with our server. Try again later.")
+        res.status(500).send("500 Internal Server Error -- Please Try again later")
     }
 })
 
